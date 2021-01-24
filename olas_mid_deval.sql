@@ -94,8 +94,9 @@ CREATE TABLE `tblemployees` (
   `Status` varchar(15) NOT NULL,
   `RegDate` timestamp NOT NULL DEFAULT current_timestamp(),
   `permissionLevel` varchar(50) DEFAULT NULL,
+  `secHeadId` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +105,7 @@ CREATE TABLE `tblemployees` (
 
 LOCK TABLES `tblemployees` WRITE;
 /*!40000 ALTER TABLE `tblemployees` DISABLE KEYS */;
-INSERT INTO `tblemployees` VALUES (11,'Executive_001','Executive','Executive','Executive@Executive','671aa2e8cc2c2435cf509fa4a3baf26c','Other','1 January, 1993','Human Resources','44','1234567890','Executive','123456789v','admin','Institute','1','2021-01-23 15:56:10','sectionHead'),(12,'Officer_001','Officer','Officer','Officer@Officer','52c375813696b3de9433c236b3ba0253','Male','','IT Department','zotac','1234567891','Officer','12345+6789Offic','Executive','Institute','1','2021-01-23 15:57:55','noApproval');
+INSERT INTO `tblemployees` VALUES (1,'Director_001','Director','Director','Director@Director','7c5ba892645af8d7dba520e3978c726f','Male','2 January, 1991','Human Resources','Director,Director,Director','1234567891','','7539521467','Director','7539521467','1','2021-01-24 18:09:58','Director','1'),(2,'Executive_002','Executive','Executive','Executive@Executive','671aa2e8cc2c2435cf509fa4a3baf26c','Other','1 January, 1993','Human Resources','44','1234567890','Executive','123456789v','admin','Institute','1','2021-01-23 15:56:10','sectionHead','1'),(3,'Officer_003','Officer','Officer','Officer@Officer','52c375813696b3de9433c236b3ba0253','Male','','IT Department','zotac','1234567891','Officer','12345+6789Offic','Executive','Institute','1','2021-01-23 15:57:55','noApproval','2');
 /*!40000 ALTER TABLE `tblemployees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,7 +130,7 @@ CREATE TABLE `tblleaves` (
   `AppSecHeadDate` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `UserEmail` (`empid`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +139,7 @@ CREATE TABLE `tblleaves` (
 
 LOCK TABLES `tblleaves` WRITE;
 /*!40000 ALTER TABLE `tblleaves` DISABLE KEYS */;
-INSERT INTO `tblleaves` VALUES (1,'Casual Leave','25/01/2001','26/01/2001','whatever','2021-01-23 16:04:19','11','0',12,'Approved','24/01/2021'),(2,'Personal Leavee','05/05/2055','06/06/2066','6+66666','2021-01-23 16:15:07','11','',12,'Approved','24/01/2021');
+INSERT INTO `tblleaves` VALUES (1,'Casual Leave','25/01/2001','26/01/2001','whatever','2021-01-23 16:04:19','2','2',3,'Approved','24/01/2021'),(2,'Personal Leavee','05/05/2055','06/06/2066','6+66666','2021-01-23 16:15:07','2','1',3,'Approved','24/01/2021'),(16,'Personal Leavee','11/11/2011','22/02/2022','111111->2222222','2021-01-24 20:48:14','1','1',2,'Approved','24/01/2021');
 /*!40000 ALTER TABLE `tblleaves` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -177,4 +178,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-24 21:35:23
+-- Dump completed on 2021-01-25  2:25:59
