@@ -10,20 +10,29 @@ else{
 if(isset($_POST['apply']))
 {
 $empid=$_SESSION['eid'];
- $leavetype=$_POST['leavetype'];
+
+$sql2 = "SELECT secHeadId from  tblemployees where id=:empid";
+$query2 = $dbh -> prepare($sql2);
+$query2->bindParam(':empid',$empid,PDO::PARAM_STR);
+$query2->execute();
+$result2=$query2->fetch(PDO::FETCH_OBJ);
+$AppSecHead=$result2->secHeadId;
+
+$leavetype=$_POST['leavetype'];
 $fromdate=$_POST['fromdate'];  
 $todate=$_POST['todate'];
 $description=$_POST['description'];  
 if($fromdate > $todate){
-                $error=" ToDate should be greater than FromDate ";
-           }
-$sql="INSERT INTO tblleaves(LeaveType,ToDate,FromDate,Description,empid) VALUES(:leavetype,:fromdate,:todate,:description,:empid)";
+    $error=" ToDate should be greater than FromDate ";
+}
+$sql="INSERT INTO tblleaves(LeaveType,ToDate,FromDate,Description,empid,AppSecHead,AppDirector,AppSecHeadStatus) VALUES(:leavetype,:fromdate,:todate,:description,:empid,:AppSecHead,'0','')";
 $query = $dbh->prepare($sql);
 $query->bindParam(':leavetype',$leavetype,PDO::PARAM_STR);
 $query->bindParam(':fromdate',$fromdate,PDO::PARAM_STR);
 $query->bindParam(':todate',$todate,PDO::PARAM_STR);
 $query->bindParam(':description',$description,PDO::PARAM_STR);
 $query->bindParam(':empid',$empid,PDO::PARAM_STR);
+$query->bindParam(':AppSecHead',$AppSecHead,PDO::PARAM_STR);
 $query->execute();
 $lastInsertId = $dbh->lastInsertId();
 if($lastInsertId)

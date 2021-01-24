@@ -109,15 +109,15 @@ foreach($results as $result)
 												echo htmlentities(($result->AppSecHeadStatus)." "."at"." ".$result->AppSecHeadDate);
 											}
                                             ?></td>
-                                            <td><?php $stats=$result->Status;
-if($stats==1){
+                                            <td><?php $stats=$result->AppDirector;
+												if($stats==1){
                                              ?>
                                                  <span style="color: green">Approved</span>
                                                  <?php } if($stats==2)  { ?>
                                                 <span style="color: red">Not Approved</span>
                                                  <?php } if($stats==0)  { ?>
- <span style="color: blue">waiting for approval</span>
- <?php } ?>
+												<span style="color: blue">waiting for approval</span>
+												<?php } ?>
 
                                              </td>
           

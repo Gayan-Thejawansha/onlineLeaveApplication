@@ -30,7 +30,16 @@
 						<ul>
 							<li><a href="apply-leave.php">Apply Leave</a></li>
 							<li><a href="leavehistory.php">Leave History</a></li>
-							<li><a href="myApprovals.php">Approvals</a></li>
+							<?php
+							if ($result->permissionLevel=="sectionHead" || $result->permissionLevel=="Director"  ) {?>
+								<li><a href="myApprovals.php">Approvals</a></li>
+							<?php } ?>
+							
+							<?php
+							if ($result->FirstName=="Director"  ) {?>
+								<li><a href="directorApprovals.php">Final Approvals for Director </a></li>
+							<?php } ?>
+							
 						</ul>
 					</div>
 			</li>

@@ -12,31 +12,31 @@ else{
 if(isset($_GET['rejectLeaveId']))
 {
 $id=$_GET['rejectLeaveId'];
-$status="Rejected";
-$curDate=date("d/m/Y");
-$sql = "update tblleaves set AppSecHeadStatus=:status,AppSecHeadDate=:curDate WHERE id=:id";
+$status="2";
+//$curDate=date("d/m/Y");
+$sql = "update tblleaves set AppDirector=:status WHERE id=:id";
 $query = $dbh->prepare($sql);
 $query -> bindParam(':id',$id, PDO::PARAM_STR);
 $query -> bindParam(':status',$status, PDO::PARAM_STR);
-$query -> bindParam(':curDate',$curDate, PDO::PARAM_STR);
+//$query -> bindParam(':curDate',$curDate, PDO::PARAM_STR);
 $query -> execute();
-header('location:myApprovals.php');
+header('location:directorApprovals.php');
 }
 
 //code for active employee
 if(isset($_GET['approveLeaveId']))
 {
 $id=$_GET['approveLeaveId'];
-$status="Approved";
-$curDate=date("d/m/Y");
+$status="1";
+//$curDate=date("d/m/Y");
 
-$sql = "update tblleaves set AppSecHeadStatus=:status,AppSecHeadDate=:curDate  WHERE id=:id";
+$sql = "update tblleaves set AppDirector=:status WHERE id=:id";
 $query = $dbh->prepare($sql);
 $query -> bindParam(':id',$id, PDO::PARAM_STR);
 $query -> bindParam(':status',$status, PDO::PARAM_STR);
-$query -> bindParam(':curDate',$curDate, PDO::PARAM_STR);
+//$query -> bindParam(':curDate',$curDate, PDO::PARAM_STR);
 $query -> execute();
-header('location:myApprovals.php');
+header('location:directorApprovals.php');
 }
 ?>
 
@@ -115,15 +115,17 @@ header('location:myApprovals.php');
                                  
                                     <tbody>
 <?php 
-$eid=$_SESSION['eid'];
-$sql = "SELECT tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblleaves.id,tblleaves.LeaveType,tblleaves.ToDate,tblleaves.FromDate,tblleaves.Description,tblleaves.PostingDate,tblleaves.AppSecHead,tblleaves.AppSecHeadStatus,tblleaves.AppSecHeadDate,tblleaves.AppDirector from tblleaves INNER JOIN tblemployees ON tblleaves.empid=tblemployees.id where AppSecHead=:eid";
+//$eid=$_SESSION['eid'];
+$sql = "SELECT tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblleaves.id,tblleaves.LeaveType,tblleaves.ToDate,tblleaves.FromDate,tblleaves.Description,tblleaves.PostingDate,tblleaves.AppSecHead,tblleaves.AppSecHeadStatus,tblleaves.AppSecHeadDate,tblleaves.AppDirector from tblleaves INNER JOIN tblemployees ON tblleaves.empid=tblemployees.id where AppSecHeadStatus='Approved'";
 $query = $dbh -> prepare($sql);
-$query->bindParam(':eid',$eid,PDO::PARAM_STR);
+//$query->bindParam(':eid',$eid,PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
 $cnt=1;
 if($query->rowCount() > 0){
-	foreach($results as $result){?>  
+	foreach($results as $result){
+		$eidHead = $result->AppSecHead;
+		?>  
 											<tr>
                                             <td> <?php echo htmlentities($cnt);?></td>
 											<td><?php echo htmlentities($result->FirstName." ".$result->LastName."(".$result->EmpId.")");?></td>
@@ -132,32 +134,24 @@ if($query->rowCount() > 0){
                                             <td><?php echo htmlentities($result->FromDate);?></td>
                                            <td><?php echo htmlentities($result->Description);?></td>
                                             <td><?php echo htmlentities($result->PostingDate);?></td>
-											
-											<td><?php if($result->AppSecHeadStatus=="") {
-												echo htmlentities('waiting for approval');
-                                            } else{
-												$eidHead = $result->AppSecHead;
-												$sql = "SELECT FirstName,LastName,EmpId from  tblemployees where id=:eidHead";
-												$query2 = $dbh -> prepare($sql);
-												$query2->bindParam(':eidHead',$eid,PDO::PARAM_STR);
+											<td><?php
+												$sql2 = "SELECT FirstName,LastName,EmpId from  tblemployees where id=:eidHead";
+												$query2 = $dbh -> prepare($sql2);
+												$query2->bindParam(':eidHead',$eidHead,PDO::PARAM_STR);
 												$query2->execute();
-												$results2=$query2->fetchAll(PDO::FETCH_OBJ);
-												$cnt2=1;
-												//if($query2->rowCount() > 0) {
-													foreach($results2 as $result2){
+												$result2=$query2->fetch(PDO::FETCH_OBJ);
 														echo htmlentities(($result->AppSecHeadStatus)." by ".$result2->FirstName." ".$result2->LastName."(".$result2->EmpId.")"." at ".$result->AppSecHeadDate);
-													}
-											}
+													
                                             ?>
 											</td>
 											<?php if($result->AppDirector=="0"){ ?>
-											<td><a href="myApprovals.php?rejectLeaveId=<?php echo htmlentities($result->id);?>" onclick="return confirm('Are you sure you want to REJECT this Leave?');" > <i class="material-icons" title="Inactive">clear</i>
-												<a href="myApprovals.php?approveLeaveId=<?php echo htmlentities($result->id);?>" onclick="return confirm('Are you sure you want to Approve this Leave?');"><i class="material-icons" title="Active">done</i></td>          
+											<td><a href="directorApprovals.php?rejectLeaveId=<?php echo htmlentities($result->id);?>" onclick="return confirm('Are you sure you want to REJECT this Leave?');" > <i class="material-icons" title="Inactive">clear</i>
+												<a href="directorApprovals.php?approveLeaveId=<?php echo htmlentities($result->id);?>" onclick="return confirm('Are you sure you want to Approve this Leave?');"><i class="material-icons" title="Active">done</i></td>          
 											</td>
 											<?php }else if ($result->AppDirector=="1"){ ?>
-											<td>Director Already Approved</td>
+											<td>You Already Approved</td>
 											<?php }else {?>
-											<td>Director Already Rejected</td>
+											<td>You Already Rejected</td>
 											<?php }?>
                                          <?php $cnt++;} }?>
                                     </tbody>
