@@ -41,7 +41,9 @@
                         <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">account_box</i>Employees<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
                         <div class="collapsible-body">
                             <ul>
-                                <li><a href="addemployee.php">Add Employee</a></li>
+                                <li><a href="adddirector.php">Add Director</a></li>
+								<li><a href="addsectionhead.php">Add Section Head</a></li>
+								<li><a href="addemployee.php">Add Employee</a></li>
                                 <li><a href="manageemployee.php">Manage Employee</a></li>
        
                             </ul>

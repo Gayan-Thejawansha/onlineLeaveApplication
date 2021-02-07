@@ -135,7 +135,7 @@ if($query->rowCount() > 0){
                                            <td><?php echo htmlentities($result->Description);?></td>
                                             <td><?php echo htmlentities($result->PostingDate);?></td>
 											<td><?php
-												$sql2 = "SELECT FirstName,LastName,EmpId from  tblemployees where id=:eidHead";
+												$sql2 = "SELECT FirstName,LastName,EmpId from  tblemployees where EmpId=:eidHead";
 												$query2 = $dbh -> prepare($sql2);
 												$query2->bindParam(':eidHead',$eidHead,PDO::PARAM_STR);
 												$query2->execute();

@@ -116,9 +116,21 @@ header('location:myApprovals.php');
                                     <tbody>
 <?php 
 $eid=$_SESSION['eid'];
-$sql = "SELECT tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblleaves.id,tblleaves.LeaveType,tblleaves.ToDate,tblleaves.FromDate,tblleaves.Description,tblleaves.PostingDate,tblleaves.AppSecHead,tblleaves.AppSecHeadStatus,tblleaves.AppSecHeadDate,tblleaves.AppDirector from tblleaves INNER JOIN tblemployees ON tblleaves.empid=tblemployees.id where AppSecHead=:eid";
+
+$eidHead = $_SESSION['eid'];
+$sql2 = "SELECT FirstName,LastName,EmpId from  tblemployees where id=:eidHead";
+$query2 = $dbh -> prepare($sql2);
+$query2->bindParam(':eidHead',$eid,PDO::PARAM_STR);
+$query2->execute();
+$results2=$query2->fetchAll(PDO::FETCH_OBJ);
+$cnt2=1;
+foreach($results2 as $result2){
+	$headEmpId = $result2->EmpId;
+}
+
+$sql = "SELECT tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblleaves.id,tblleaves.LeaveType,tblleaves.ToDate,tblleaves.FromDate,tblleaves.Description,tblleaves.PostingDate,tblleaves.AppSecHead,tblleaves.AppSecHeadStatus,tblleaves.AppSecHeadDate,tblleaves.AppDirector from tblleaves INNER JOIN tblemployees ON tblleaves.empid=tblemployees.id where AppSecHead=:headempid";
 $query = $dbh -> prepare($sql);
-$query->bindParam(':eid',$eid,PDO::PARAM_STR);
+$query->bindParam(':headempid',$headEmpId,PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
 $cnt=1;
@@ -135,18 +147,10 @@ if($query->rowCount() > 0){
 											
 											<td><?php if($result->AppSecHeadStatus=="") {
 												echo htmlentities('waiting for approval');
-                                            } else{
-												$eidHead = $result->AppSecHead;
-												$sql = "SELECT FirstName,LastName,EmpId from  tblemployees where id=:eidHead";
-												$query2 = $dbh -> prepare($sql);
-												$query2->bindParam(':eidHead',$eid,PDO::PARAM_STR);
-												$query2->execute();
-												$results2=$query2->fetchAll(PDO::FETCH_OBJ);
-												$cnt2=1;
-												//if($query2->rowCount() > 0) {
-													foreach($results2 as $result2){
+                                            } else{												
+												foreach($results2 as $result2){
 														echo htmlentities(($result->AppSecHeadStatus)." by ".$result2->FirstName." ".$result2->LastName."(".$result2->EmpId.")"." at ".$result->AppSecHeadDate);
-													}
+												}
 											}
                                             ?>
 											</td>
